@@ -8,6 +8,10 @@ class DataGenerator:
         self.dates = dates
 
     def generate_random_data(self):
+        """
+        allocating random values to the columns.
+        return : data
+        """
         data = []
         for date in self.dates:
             for user in self.users:
@@ -32,6 +36,10 @@ class DataGenerator:
 
     @staticmethod
     def create_dataframe(data):
+        """
+        creating dataframe from all the data and adding also adding an index column
+        return : df
+        """
         Index = range(1, 181)
         df = pd.DataFrame(data, columns=['User', 'Date', 'Facebook_Clicks', 'Facebook_Views', 'Facebook_bought',
                                          'Youtube_Views',
