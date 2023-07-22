@@ -1,3 +1,9 @@
+# Unified POC
+
+### Overview
+
+> The concept of this experiment is to create a solution for extracting insights about the campaign data from the raw data about advertisements.
+
 
 #### Created sample dataset 
 >Overview - Created sample dataset according to the format of the unified client dataset
