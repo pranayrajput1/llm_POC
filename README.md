@@ -1,3 +1,6 @@
+### Environment & Interpreter
+> Conda 23.5.2, Python3.10
+
 # Unified POC
 
 ### Overview

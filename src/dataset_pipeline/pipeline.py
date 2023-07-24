@@ -1,7 +1,11 @@
 import pandas as pd
 
-from dataset_creation.src.creating_dataset.dataset import DataGenerator
+from src.dataset.dataset_generator import DataGenerator
+from src.utils.constants import campaign_data
+from src.utils.helpers.log_setup import get_log
 
+# getting log setup
+logging = get_log()
 
 def pipeline():
     """
@@ -15,5 +19,6 @@ def pipeline():
     data = data_generator.generate_random_data()
     df = data_generator.create_dataframe(data)
 
-    df.to_csv('unified_data.csv', index=False)
+    logging.info("Task: Created dataset and saved to dataset folder successfully.")
+    df.to_csv(campaign_data, index=False)
     return df
