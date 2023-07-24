@@ -11,12 +11,14 @@ def insert_data_into_mysql(csv_file, db_config, table):
     try:
         logging.info("Read the CSV file into a pandas DataFrame")
         df = pd.read_csv(csv_file)
+        df = df.drop("Index", axis=1)
 
         logging.info("Establish a connection to the MySQL server")
         cursor, connection = db_config
 
         logging.info("Getting columns from dataframe")
         columns = ", ".join(df.columns)
+        columns = columns.lower()
 
         query_template = f"INSERT INTO {table} ({columns}) VALUES ({', '.join(['%s'] * len(df.columns))})"
 
@@ -34,5 +36,6 @@ def insert_data_into_mysql(csv_file, db_config, table):
 
     except Exception as e:
         print(f"Error: {e}")
+
 
 # insert_data_into_mysql(campaign_data, db_connection(), table_name)
