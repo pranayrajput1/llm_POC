@@ -56,6 +56,9 @@ def get_keywords(sentence):
     insight_users = db_entries["user"]
     insight_users_lowercase = convert_list_items_to_lowercase(insight_users)
 
+    insight_dates = db_entries["date"]
+
+    extracted_dates = [date for date in insight_dates if date in lowered_sentence]
     extracted_users = [user for user in insight_users_lowercase if user in lowered_sentence]
     extracted_activity = [activity for activity in action_list if activity in lowered_sentence]
     extracted_platform = [platform for platform in platform_list if platform in lowered_sentence]
@@ -70,6 +73,9 @@ def get_keywords(sentence):
 
     if extracted_platform:
         extracted_data["platform"] = extracted_platform
+
+    if extracted_dates:
+        extracted_data["date"] = extracted_dates
 
     if extracted_data:
         logging.info("Task: returning extracted keywords from sentence.")
