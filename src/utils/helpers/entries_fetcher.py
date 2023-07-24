@@ -9,10 +9,20 @@ logging = get_log()
 def get_entries(keywords_dictionary):
     extracted_data_entries = {}
 
-    for platform in keywords_dictionary["platform"]:
-        for activity_value in keywords_dictionary["activity"]:
+    platform_values = keywords_dictionary.get("platform", [])
+    activity_values = keywords_dictionary.get("activity", [])
+    user_values = keywords_dictionary.get("user", [])
 
-            query = f"SELECT {platform+'_'+activity_value} FROM {table_name}"
-            extracted_data_entries[platform+'_'+activity_value] = run_query(query)
+    for platform in platform_values:
+        for activity in activity_values:
+            if len(user_values) == 0:
+                query = f"SELECT {platform}_{activity} FROM {table_name}"
+                extracted_data_entries[f"{platform}_{activity}"] = run_query(query)
+            else:
+                for user in user_values:
+                    query = f"SELECT {platform}_{activity} FROM {table_name} WHERE user = '{user}';"
+                    extracted_data_entries[f"{user}_{platform}_{activity}"] = run_query(query)
 
     return extracted_data_entries
+
+
