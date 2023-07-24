@@ -19,4 +19,4 @@ class AnalysisEngine:
 if __name__ == "__main__":
     analysis_instance = AnalysisEngine()
     result = analysis_instance.analysis_pipeline()
-    print(result.items())
+    print(result)

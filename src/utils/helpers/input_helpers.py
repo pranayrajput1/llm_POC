@@ -1,8 +1,8 @@
-# getting log setup
 from src.db.db_connection import db_connection
 from src.utils.constants import table_name, action_list, platform_list
 from src.utils.helpers.log_setup import get_log
 
+# getting log setup
 logging = get_log()
 
 
@@ -12,7 +12,7 @@ def get_user_query():
 
 
 def run_query(query):
-    logging.info("Task: Connecting with database")
+    # logging.info("Task: Connecting with database")
     cursor, conn = db_connection()
     cursor.execute(query)
     data = cursor.fetchall()
@@ -21,10 +21,13 @@ def run_query(query):
     return data
 
 
-def validate_entries():
-    logging.info("Task: Connecting with database")
-    cursor, conn = db_connection()
+def convert_list_items_to_lowercase(input_list):
+    return [item.lower() for item in input_list]
 
+
+def validate_entries():
+    # logging.info("Task: Connecting with database")
+    cursor, conn = db_connection()
     query = f"SELECT * FROM {table_name}"
     cursor.execute(query)
     columns = [col[0] for col in cursor.description]
@@ -51,26 +54,21 @@ def get_keywords(sentence):
     db_entries = validate_entries()
 
     insight_users = db_entries["user"]
-    insight_dates = db_entries["date"]
+    insight_users_lowercase = convert_list_items_to_lowercase(insight_users)
 
-    # print(insight_dates)
-
-    extracted_users = [keyword for keyword in insight_users if keyword in lowered_sentence]
-    # extracted_dates = [date for date in insight_dates if date in lowered_sentence]
+    extracted_users = [user for user in insight_users_lowercase if user in lowered_sentence]
     extracted_activity = [activity for activity in action_list if activity in lowered_sentence]
     extracted_platform = [platform for platform in platform_list if platform in lowered_sentence]
 
     extracted_data = {}
+
     if extracted_users:
         extracted_data["user"] = extracted_users
-
-    # if extracted_dates:
-    #     extracted_data["dates"] = extracted_dates
 
     if extracted_activity:
         extracted_data["activity"] = extracted_activity
 
-    if extracted_activity:
+    if extracted_platform:
         extracted_data["platform"] = extracted_platform
 
     if extracted_data:
