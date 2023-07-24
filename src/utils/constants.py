@@ -5,8 +5,8 @@ path = Path(__file__).resolve().parent.parent
 dataset_dir = path / "dataset"
 campaign_data = dataset_dir / "unified_data.csv"
 
-db_password = "knoldus"
-db_user = "knoldus"
+db_password = "sanskriti"
+db_user = "sanskriti"
 db_host = "localhost"
 database = "campaign_data"
 table_name = "unified_data"
