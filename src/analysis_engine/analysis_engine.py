@@ -14,13 +14,13 @@ class AnalysisEngine:
         user_query = get_user_query()
         extracted_keywords = get_keywords(user_query)
         response = get_entries(extracted_keywords)
+        print(response)
         operation = extract_operation(user_query)
         function = select_function_based_on_keyword(response,operation)
-        return response
+        return function
 
 
 if __name__ == "__main__":
     analysis_instance = AnalysisEngine()
     result = analysis_instance.analysis_pipeline()
-    print(result.items())
-    print(len(result))
+    print(result)
