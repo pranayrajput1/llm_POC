@@ -10,7 +10,7 @@ db_user = "sanskriti"
 db_host = "localhost"
 database = "campaign_data"
 table_name = "unified_data"
-
+user_variable = "user"
 column_keywords = ["user", "date", "facebook_clicks", "facebook_views",
                    "facebook_bought", "youtube_views", "youtube_clicks",
                    "youtube_followers", "youtube_bought", "youtube_subscription",
