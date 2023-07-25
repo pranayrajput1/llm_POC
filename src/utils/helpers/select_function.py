@@ -4,27 +4,9 @@ from nltk.tokenize import word_tokenize
 
 from src.analysis_engine.min_max_avg import get_max_value, get_min_value, get_average
 from src.utils.constants import campaign_data
-import logging
+from src.utils.helpers.input_helpers import get_log
 
-
-def get_log():
-    """
-    Initializing logger basic configuration
-    """
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
-    return logging
-
-
-def append_to_dataframe(question, answer):
-    """
-    appending the question and answer in a dataframe.
-    :param question:
-    :param answer:
-    """
-    global df
-    df = df.append({"Question": question, "Answer": answer}, ignore_index=True)
-    return df
+logging = get_log()
 
 
 def preprocess_question(question):

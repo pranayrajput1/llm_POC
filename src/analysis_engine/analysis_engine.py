@@ -1,6 +1,6 @@
 import pandas as pd
-from src.utils.helpers.input_helpers import get_user_query
-from src.utils.helpers.select_function import extract_operation, select_function_based_on_keyword, column_name, get_log
+from src.utils.helpers.input_helpers import get_user_query, get_log
+from src.utils.helpers.select_function import extract_operation, select_function_based_on_keyword, column_name
 
 logging = get_log()
 df = pd.DataFrame(columns=["Question", "Answer"])

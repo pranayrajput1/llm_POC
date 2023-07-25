@@ -1,9 +1,17 @@
 from src.db.db_connection import db_connection
 from src.utils.constants import table_name, action_list, platform_list
-from src.utils.helpers.log_setup import get_log
+import logging
+
 
 # getting log setup
-logging = get_log()
+
+def get_log():
+    """
+    Initializing logger basic configuration
+    """
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+    return logging
 
 
 def get_user_query():
