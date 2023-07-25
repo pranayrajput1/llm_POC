@@ -12,7 +12,7 @@ class AnalysisEngine:
     def analysis_pipeline():
         """
         calling all the function for the pipeline and returning output
-        :return function
+        @return function
         """
         user_query = get_user_query()
         operation = extract_operation(user_query)
