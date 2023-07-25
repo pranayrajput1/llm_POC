@@ -11,10 +11,12 @@ db_host = "localhost"
 database = "campaign_data"
 table_name = "unified_data"
 user_variable = "user"
-column_keywords = ["user", "date", "facebook_clicks", "facebook_views",
-                   "facebook_bought", "youtube_views", "youtube_clicks",
-                   "youtube_followers", "youtube_bought", "youtube_subscription",
-                   "instagram_views", "instagram_clicks", "instagram_followers"]
 
 platform_list = ["facebook", "youtube", "instagram"]
 action_list = ["views", "clicks", "bought", "subscription", "followers"]
+
+numeric_value_constant = "Task: Getting numerical columns from tha dataframe"
+column_name_none = "Task: Checking if column_name is None"
+categorical_col_issue = "Sorry can't perform the maximum operation on categorical columns"
+
+categorical_col_check = "Checking is provided column values are categorical"
