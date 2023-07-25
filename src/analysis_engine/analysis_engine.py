@@ -14,7 +14,6 @@ class AnalysisEngine:
         user_query = get_user_query()
         extracted_keywords = get_keywords(user_query)
         response = get_entries(extracted_keywords)
-        print(response)
         operation = extract_operation(user_query)
         function = select_function_based_on_keyword(response,operation)
         return function

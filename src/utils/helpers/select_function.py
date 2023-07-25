@@ -1,4 +1,7 @@
-from src.analysis_functions.max_values import get_individual_max_values
+import pandas as pd
+
+from src.analysis_engine.min_max_avg import get_max_value
+from src.utils.constants import campaign_data
 
 
 def extract_operation(question):
@@ -18,12 +21,15 @@ def extract_operation(question):
 
 
 def select_function_based_on_keyword(keywords_dictionary,operation):
+
     key = list(keywords_dictionary.keys())[0]
     parts = key.split('_')
     User = parts[0]
     platform = '_'.join(parts[1:])
+    dataframe = pd.read_csv(campaign_data)
+    df = pd.DataFrame(dataframe)
     if operation == "highest":
-        result = get_individual_max_values(keywords_dictionary)
+        result = get_max_value(df,platform)
         if result and len(result) > 0:
             number = result[0][0]
             return f"The highest {platform} of {User} are {number}"
