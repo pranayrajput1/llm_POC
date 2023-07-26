@@ -9,6 +9,12 @@ from src.utils.helpers.input_helpers import get_log
 logging = get_log()
 
 
+def build_question(operation, column):
+    result = f"What is the {operation} count of {column}?"
+    return result
+    pass
+
+
 def preprocess_question(question):
     """
     generating combination of tokens to form potential column name in sequence
@@ -28,6 +34,7 @@ def preprocess_question(question):
 
     logging.info("Calculated the combination of column name")
     return candidates
+    pass
 
 
 def column_name(question):
@@ -48,7 +55,13 @@ def column_name(question):
                         candidate in dataframe_columns_lower]
 
     logging.info("Task : Finding the column")
-    return matching_columns if matching_columns else None
+
+    if matching_columns:
+        return matching_columns
+    else:
+        logging.info("Wrong column name")
+        return None
+    pass
 
 
 def extract_operation(question):
@@ -91,37 +104,45 @@ def select_function_based_on_keyword(question, operation, platform1, platform2=N
             result = get_max_value(df, platform1)
             data = [question, f"The highest value for {platform1} is {result}"]
             return data
+            pass
 
         elif operation == "lowest":
             result = get_min_value(df, platform1)
-            data = [question,f"The lowest value for {platform1} is {result}"]
+            data = [question, f"The lowest value for {platform1} is {result}"]
             return data
+            pass
 
         elif operation == "average":
             result = get_average(df, platform1)
             data = [question, f"The average value of {platform1} is {result}"]
             return data
+            pass
         else:
             return "Sorry, the input is not correct."
+            pass
 
 
     else:
         if operation == "highest":
             result1 = get_max_value(df, platform1)
             result2 = get_max_value(df, platform2)
-            data = [question,f"The highest value for {platform1} is {result1}, and for {platform2} is {result2}"]
+            data = [question, f"The highest value for {platform1} is {result1}, and for {platform2} is {result2}"]
             return data
+            pass
 
         elif operation == "lowest":
             result1 = get_min_value(df, platform1)
             result2 = get_min_value(df, platform2)
-            data = [question,f"The lowest value for {platform1} is {result1}, and for {platform2} is {result2}"]
+            data = [question, f"The lowest value for {platform1} is {result1}, and for {platform2} is {result2}"]
             return data
+            pass
 
         elif operation == "average":
             result1 = get_average(df, platform1)
             result2 = get_average(df, platform2)
-            data = [question,f"The average value of {platform1} is {result1}, and for {platform2} is {result2}"]
+            data = [question, f"The average value of {platform1} is {result1}, and for {platform2} is {result2}"]
             return data
+            pass
         else:
             return "Sorry, the input is not correct."
+            pass
