@@ -10,6 +10,12 @@ logging = get_log()
 
 
 def build_question(operation, column):
+    """
+    building question from the operation and column name
+    :param operation
+    :param column
+    :return question
+    """
     result = f"What is the {operation} count of {column}?"
     return result
     pass
