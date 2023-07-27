@@ -64,7 +64,7 @@ def column_name(question):
                          "Instagram_Views", "Instagram_Clicks", "Instagram_Followers"]
     dataframe_columns_lower = [column.lower() for column in dataframe_columns]
 
-    candidates_list = preprocess_question([question])  # Convert question to list for compatibility
+    candidates_list = preprocess_question([question])
 
     matching_columns_list = []
 
@@ -84,7 +84,7 @@ def select_function_based_on_keyword(question, operation, column_name):
     @param question
     @param operation
     @param column_name
-    @return data
+    @return question , answer
     """
     dataframe = pd.read_csv(campaign_data)
     df = pd.DataFrame(dataframe)
