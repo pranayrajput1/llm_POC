@@ -24,7 +24,6 @@ class AnalysisEngine:
 
         for operation in operations:
             for column in dataframe_columns:
-                # Generate multiple questions for each operation and column
                 building_questions = build_question(operation, column)
                 questions.extend(building_questions)
 

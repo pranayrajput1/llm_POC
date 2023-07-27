@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.dataset.dataset_generator import DataGenerator
+from src.data.dataset import DataGenerator
 from src.utils.constants import campaign_data
 from src.utils.helpers.log_setup import get_log
 
