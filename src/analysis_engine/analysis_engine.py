@@ -1,8 +1,8 @@
-from src.utils.helpers.entries_fetcher import get_entries
-from src.utils.helpers.input_helpers import get_user_query, get_keywords
-from src.utils.helpers.log_setup import get_log
+import pandas as pd
+from src.utils.helpers.input_helpers import get_user_query, get_log
+from src.utils.helpers.select_function import select_function_based_on_keyword, column_name, \
+    build_question
 
-# getting log setup
 logging = get_log()
 
 
@@ -10,13 +10,36 @@ class AnalysisEngine:
 
     @staticmethod
     def analysis_pipeline():
-        user_query = get_user_query()
-        extracted_keywords = get_keywords(user_query)
-        response = get_entries(extracted_keywords)
-        return response
+        """
+        calling all the function for the pipeline and returning output
+        @return function
+        """
+
+        operations = ["highest", "lowest", "average","greatest","peak","least"]
+        dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Youtube_Views",
+                             "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",
+                             "Instagram_Views", "Instagram_Clicks", "Instagram_Followers"]
+        questions = []
+        answers = []
+
+        for operation in operations:
+            for column in dataframe_columns:
+                building_questions = build_question(operation, column)
+                questions.extend(building_questions)
+
+                for question in building_questions:
+                    extracted_col_names = column_name(question)
+                    answer = select_function_based_on_keyword(question, operation, extracted_col_names)
+                    answers.append(answer[1])
+
+        df = pd.DataFrame({"Question": questions, "Answer": answers})
+        df.index = pd.RangeIndex(start=1, stop=df.shape[0] + 1)
+
+        df.to_csv("question_answer_dataset.csv", index_label="Index")
+        print("Dataframe saved to 'question_answer_dataset.csv'")
+        print("Exit")
 
 
 if __name__ == "__main__":
     analysis_instance = AnalysisEngine()
-    result = analysis_instance.analysis_pipeline()
-    print(result)
+    analysis_instance.analysis_pipeline()

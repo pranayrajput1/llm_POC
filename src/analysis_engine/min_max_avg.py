@@ -1,7 +1,7 @@
 import numpy as np
 
 from src.utils.constants import numeric_value_constant, column_name_none, categorical_col_check, categorical_col_issue
-from src.utils.helpers.log_setup import get_log
+from src.utils.helpers.input_helpers import get_log
 
 # getting log setup
 logging = get_log()

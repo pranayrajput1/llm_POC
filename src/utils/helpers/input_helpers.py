@@ -1,9 +1,17 @@
 from src.db.db_connection import db_connection
 from src.utils.constants import table_name, action_list, platform_list
-from src.utils.helpers.log_setup import get_log
+import logging
+
 
 # getting log setup
-logging = get_log()
+
+def get_log():
+    """
+    Initializing logger basic configuration
+    """
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+    return logging
 
 
 def get_user_query():
@@ -47,8 +55,8 @@ def validate_entries():
 
 
 def get_keywords(sentence):
-    logging.info("Task: converting sentence to lower case.")
-    lowered_sentence = sentence.lower()
+    # logging.info("Task: converting sentence to lower case.")
+    # lowered_sentence = sentence.lower()
 
     logging.info("Task: getting entries from database to validate.")
     db_entries = validate_entries()
@@ -58,7 +66,7 @@ def get_keywords(sentence):
 
     insight_dates = db_entries["date"]
 
-    extracted_dates = [date for date in insight_dates if date in lowered_sentence]
+    # extracted_dates = [date for date in insight_dates if date in lowered_sentence]
     extracted_users = [user for user in insight_users_lowercase if user in lowered_sentence]
     extracted_activity = [activity for activity in action_list if activity in lowered_sentence]
     extracted_platform = [platform for platform in platform_list if platform in lowered_sentence]
@@ -74,8 +82,8 @@ def get_keywords(sentence):
     if extracted_platform:
         extracted_data["platform"] = extracted_platform
 
-    if extracted_dates:
-        extracted_data["date"] = extracted_dates
+    # if extracted_dates:
+    #     extracted_data["date"] = extracted_dates
 
     if extracted_data:
         logging.info("Task: returning extracted keywords from sentence.")
