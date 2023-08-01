@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 
-from src.utils.constants import numeric_value_constant, column_name_none, categorical_col_check, categorical_col_issue
+from src.utils.constants import numeric_value_constant, column_name_none, categorical_col_check, categorical_col_issue, \
+    campaign_data
 from src.utils.helpers.input_helpers import get_log
 
 # getting log setup
@@ -21,7 +23,6 @@ def get_max_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-
         logging.debug(column_name_none)
         if column_name is None:
             max_value = dataframe[numeric_columns].max().max()
@@ -118,3 +119,43 @@ def get_average(dataframe, column_name=None):
 
     except Exception as e:
         logging.error(f"Some error occurred in getting the average value from the data, Error: {e}")
+
+
+def percent_increase(dataframe, column_name=None):
+    """
+    Function to calculate the percentage increase from the data and also from a specified column if provided
+    :param dataframe
+    :param column_name
+    :return highest percentage increase
+    """
+    try:
+        logging.info("Task: Get dataframe and calculate the percent increase value from it, either from whole data or "
+                     "column"
+                     "specific")
+        old_value = dataframe[column_name].shift(1)
+        percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
+        highest_percentage_increase = percentage_increase.max()
+        return highest_percentage_increase
+
+    except Exception as e:
+        logging.error(f"Some error occurred in calculating the percentage increase, Error: {e}")
+
+
+def percent_decrease(dataframe, column_name: None):
+    """
+    Function to calculate the percent decrease from the data and also from a specified column
+    :param dataframe
+    :param column_name
+    :return highest percent decrease
+    """
+    try:
+        logging.info("Task: Get dataframe and calculate the percent decrease value from it, either from whole data or "
+                     "column"
+                     "specific")
+        old_value = dataframe[column_name].shift(1)
+        percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
+        highest_percent_decrease = percentage_decrease.max()
+        return highest_percent_decrease
+
+    except Exception as e:
+        logging.error(f"Some error occurred in calculating the percentage decrease, Error: {e}")
