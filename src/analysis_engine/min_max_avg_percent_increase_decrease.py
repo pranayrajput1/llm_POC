@@ -129,9 +129,7 @@ def percent_increase(dataframe, column_name=None):
     :return highest percentage increase
     """
     try:
-        logging.info("Task: Get dataframe and calculate the percent increase value from it, either from whole data or "
-                     "column"
-                     "specific")
+        logging.info("Task: Get dataframe and calculate the percent increase value from a specific column")
         old_value = dataframe[column_name].shift(1)
         percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
         highest_percentage_increase = percentage_increase.max()
@@ -149,9 +147,7 @@ def percent_decrease(dataframe, column_name: None):
     :return highest percent decrease
     """
     try:
-        logging.info("Task: Get dataframe and calculate the percent decrease value from it, either from whole data or "
-                     "column"
-                     "specific")
+        logging.info("Task: Get dataframe and calculate the percent decrease value from a specific column ")
         old_value = dataframe[column_name].shift(1)
         percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
         highest_percent_decrease = percentage_decrease.max()
