@@ -2,7 +2,8 @@ import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
 
-from src.analysis_engine.min_max_avg import get_max_value, get_min_value, get_average
+from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, percent_decrease, \
+    percent_increase
 from src.utils.constants import campaign_data
 from src.utils.helpers.input_helpers import get_log
 
@@ -120,6 +121,32 @@ def select_function_based_on_keyword(question, operation, column_name):
 
     elif operation == "average":
         result = get_average(df, column_name)
+        if "tell me" in question.lower():
+            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
+        elif "statistics" in question.lower():
+            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
+        elif "give me" in question.lower():
+            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+        elif "identify" in question.lower():
+            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+        else:
+            return question, f"Sure, The average value of {platform} {metric} is {result}"
+
+    elif operation == "percent increase":
+        result = percent_increase(df, column_name)
+        if "tell me" in question.lower():
+            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
+        elif "statistics" in question.lower():
+            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
+        elif "give me" in question.lower():
+            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+        elif "identify" in question.lower():
+            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+        else:
+            return question, f"Sure, The average value of {platform} {metric} is {result}"
+
+    elif operation == "percent decrease":
+        result = percent_decrease(df, column_name)
         if "tell me" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
