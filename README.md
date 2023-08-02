@@ -23,3 +23,6 @@ At the end of running the project, we will have a CSV file.
 
 #### Analysis Engine
 We have created an analysis engine for basic functionalities like calculating min, max and average value of the entire dataframe or column specific series for numerical columns.
+
+#### Building script for prompt generation
+We have created a script for prompt generation, where we are creating prompts with a generic pattern, and saving them in a csv file to feed our model.
