@@ -2,7 +2,8 @@ import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
 
-from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, percent_decrease, \
+from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, \
+    percent_decrease, \
     percent_increase
 from src.utils.constants import campaign_data
 from src.utils.helpers.input_helpers import get_log
@@ -22,10 +23,10 @@ def build_question(operation, column):
     questions = []
 
     questions.append(f"What is the {operation} count of {platform} {metric}?")
-    questions.append(f"Tell me the {operation} count of {platform} {metric}.")
-    questions.append(f"What are the {operation} statistics for {platform} {metric}?")
-    questions.append(f"Give me the {operation} count of {platform} {metric}.")
-    questions.append(f"Identify the {operation} count of {platform} {metric}?")
+    questions.append(f"Kindly provide the {operation} count of {platform} {metric}.")
+    questions.append(f"Could you share the {operation} statistics for {platform} {metric}?")
+    questions.append(f"I'd like to know the {operation} count of {platform} {metric}, please.")
+    questions.append(f"Can you identify the {operation} count of {platform} {metric}?")
     return questions
 
 
@@ -93,70 +94,74 @@ def select_function_based_on_keyword(question, operation, column_name):
 
     if operation in ["highest", "greatest", "peak"]:
         result = get_max_value(df, column_name)
-        if "tell me" in question.lower():
+        if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
-            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
-        elif "give me" in question.lower():
-            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
+        elif "please" in question.lower():
+            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
         elif "identify" in question.lower():
-            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
         else:
             return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
 
 
     elif operation in ["lowest", "least"]:
         result = get_min_value(df, column_name)
-        if "tell me" in question.lower():
+        if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
-            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
-        elif "give me" in question.lower():
-            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
+        elif "please" in question.lower():
+            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
         elif "identify" in question.lower():
-            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
         else:
-            return question, f"Sure, {platform} {metric} {operation} count is {result}"
+            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
+
 
 
     elif operation == "average":
         result = get_average(df, column_name)
-        if "tell me" in question.lower():
+        if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
-            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
-        elif "give me" in question.lower():
-            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
+        elif "please" in question.lower():
+            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
         elif "identify" in question.lower():
-            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
         else:
-            return question, f"Sure, The average value of {platform} {metric} is {result}"
+            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
+
 
     elif operation == "percent increase":
         result = percent_increase(df, column_name)
-        if "tell me" in question.lower():
+        if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
-            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
-        elif "give me" in question.lower():
-            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
+        elif "please" in question.lower():
+            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
         elif "identify" in question.lower():
-            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
         else:
-            return question, f"Sure, The average value of {platform} {metric} is {result}"
+            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
+
 
     elif operation == "percent decrease":
         result = percent_decrease(df, column_name)
-        if "tell me" in question.lower():
+        if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
-            return question, f"Certainly, the {operation} statistics for {platform} {metric} is {result}."
-        elif "give me" in question.lower():
-            return question, f"Sure, the {operation} count for {platform} {metric} that you asked for is {result}."
+            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
+        elif "please" in question.lower():
+            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
         elif "identify" in question.lower():
-            return question, f"Certainly, {result} is the count for {platform} {metric} that you asked for. "
+            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
         else:
-            return question, f"Sure, The average value of {platform} {metric} is {result}"
+            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
+
 
     else:
         return "Sorry, the input is not correct."
