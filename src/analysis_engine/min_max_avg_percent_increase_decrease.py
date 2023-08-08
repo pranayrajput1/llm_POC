@@ -121,25 +121,33 @@ def get_average(dataframe, column_name=None):
         logging.error(f"Some error occurred in getting the average value from the data, Error: {e}")
 
 
-def percent_increase(dataframe, column_name=None):
+def highest_percent_increase(dataframe, column_name=None):
     """
-    Function to calculate the percentage increase from the data and also from a specified column if provided
+    Function to calculate the percentage increase from the dataframe and also from a specified column if provided
     :param dataframe
     :param column_name
     :return highest percentage increase
     """
     try:
         logging.info("Task: Get dataframe and calculate the percent increase value from a specific column")
-        old_value = dataframe[column_name].shift(1)
-        percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
-        highest_percentage_increase = percentage_increase.max()
+
+        if column_name is None:
+            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
+            old_values = dataframe[numeric_columns].shift(1)
+            percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
+            highest_percentage_increase = percentage_increase.max().max()
+        else:
+            old_value = dataframe[column_name].shift(1)
+            percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
+            highest_percentage_increase = percentage_increase.max()
+
         return highest_percentage_increase
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating the percentage increase, Error: {e}")
 
 
-def percent_decrease(dataframe, column_name: None):
+def highest_percent_decrease(dataframe, column_name=None):
     """
     Function to calculate the percent decrease from the data and also from a specified column
     :param dataframe
@@ -147,10 +155,18 @@ def percent_decrease(dataframe, column_name: None):
     :return highest percent decrease
     """
     try:
-        logging.info("Task: Get dataframe and calculate the percent decrease value from a specific column ")
-        old_value = dataframe[column_name].shift(1)
-        percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
-        highest_percent_decrease = percentage_decrease.max()
+        logging.info("Task: Get dataframe and calculate the percent decrease value from a specific column")
+
+        if column_name is None:
+            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
+            old_values = dataframe[numeric_columns].shift(1)
+            percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
+            highest_percent_decrease = percentage_decrease.max().max()
+        else:
+            old_value = dataframe[column_name].shift(1)
+            percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
+            highest_percent_decrease = percentage_decrease.max()
+
         return highest_percent_decrease
 
     except Exception as e:
