@@ -3,8 +3,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, \
-    percent_decrease, \
-    percent_increase
+    highest_percent_decrease, highest_percent_increase
 from src.utils.constants import campaign_data
 from src.utils.helpers.input_helpers import get_log
 
@@ -136,7 +135,7 @@ def select_function_based_on_keyword(question, operation, column_name):
 
 
     elif operation == "percent increase":
-        result = percent_increase(df, column_name)
+        result = highest_percent_increase(df, column_name)
         if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
@@ -150,7 +149,7 @@ def select_function_based_on_keyword(question, operation, column_name):
 
 
     elif operation == "percent decrease":
-        result = percent_decrease(df, column_name)
+        result = highest_percent_decrease(df, column_name)
         if "kindly" in question.lower():
             return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
         elif "statistics" in question.lower():
