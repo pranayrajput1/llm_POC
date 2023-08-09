@@ -12,9 +12,9 @@ logging = get_log()
 def get_max_value(dataframe, column_name=None):
     """
     Function to calculate the maximum value from the data and also for a specific column if provided.
-    :param dataframe:
-    :param column_name:
-    :return: maximum value
+    @param dataframe:
+    @param column_name:
+    @return: maximum value
     """
     try:
 
@@ -124,9 +124,9 @@ def get_average(dataframe, column_name=None):
 def highest_percent_increase(dataframe, column_name=None):
     """
     Function to calculate the percentage increase from the dataframe and also from a specified column if provided
-    :param dataframe
-    :param column_name
-    :return highest percentage increase
+    @param dataframe
+    @param column_name
+    @return highest percentage increase
     """
     try:
         logging.info("Task: Get dataframe and calculate the percent increase value from a specific column")
@@ -149,10 +149,10 @@ def highest_percent_increase(dataframe, column_name=None):
 
 def highest_percent_decrease(dataframe, column_name=None):
     """
-    Function to calculate the percent decrease from the data and also from a specified column
-    :param dataframe
-    :param column_name
-    :return highest percent decrease
+    Function to calculate the percent decrease from the dataframe and also from a specified column
+    @param dataframe
+    @param column_name
+    @return highest percent decrease
     """
     try:
         logging.info("Task: Get dataframe and calculate the percent decrease value from a specific column")
