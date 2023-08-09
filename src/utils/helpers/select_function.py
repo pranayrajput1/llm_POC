@@ -79,6 +79,44 @@ def column_name(question):
     return matching_columns_list[0] if matching_columns_list else None
 
 
+operations_mapping = {
+    "highest": get_max_value,
+    "greatest": get_max_value,
+    "peak": get_max_value,
+    "lowest": get_min_value,
+    "least": get_min_value,
+    "average": get_average,
+    "percent increase": highest_percent_increase,
+    "percent decrease": highest_percent_decrease,
+}
+
+
+def generate_response(question, result, operation, platform, metric):
+    """
+    generating response through all the parameters.
+    @param question
+    @param result
+    @param operation
+    @param platform
+    @param metric
+    @return question and answer
+    """
+    keyword_responses = {
+        "kindly": f"Certainly, {result} is the {operation} count for {platform} {metric}.",
+        "statistics": f"Indeed, the {operation} statistics for {platform} {metric} is {result}.",
+        "please": f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}.",
+        "identify": f"Absolutely, {result} is the count for {platform} {metric} that you are seeking.",
+    }
+
+    default_response = f"Sure, the {operation} value for {platform} {metric} is {result}."
+
+    for keyword, response in keyword_responses.items():
+        if keyword in question.lower():
+            return question, response
+
+    return question, default_response
+
+
 def select_function_based_on_keyword(question, operation, column_name):
     """
     Selecting the function to be called on the basis of the function.
@@ -87,81 +125,19 @@ def select_function_based_on_keyword(question, operation, column_name):
     @param column_name
     @return question , answer
     """
-    dataframe = pd.read_csv(campaign_data)
-    df = pd.DataFrame(dataframe)
-    platform, metric = column_name.split("_")
+    try:
+        logging.info("Task: Select function based on operation and generate response")
 
-    if operation in ["highest", "greatest", "peak"]:
-        result = get_max_value(df, column_name)
-        if "kindly" in question.lower():
-            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
-        elif "statistics" in question.lower():
-            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
-        elif "please" in question.lower():
-            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
-        elif "identify" in question.lower():
-            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
+        dataframe = pd.read_csv(campaign_data)
+        df = pd.DataFrame(dataframe)
+        platform, metric = column_name.split("_")
+
+        if operation in operations_mapping:
+            result = operations_mapping[operation](df, column_name)
+            response = generate_response(question, result, operation, platform, metric)
+            return response
         else:
-            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
+            return "Sorry, the input operation is not correct."
 
-
-    elif operation in ["lowest", "least"]:
-        result = get_min_value(df, column_name)
-        if "kindly" in question.lower():
-            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
-        elif "statistics" in question.lower():
-            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
-        elif "please" in question.lower():
-            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
-        elif "identify" in question.lower():
-            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
-        else:
-            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
-
-
-
-    elif operation == "average":
-        result = get_average(df, column_name)
-        if "kindly" in question.lower():
-            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
-        elif "statistics" in question.lower():
-            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
-        elif "please" in question.lower():
-            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
-        elif "identify" in question.lower():
-            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
-        else:
-            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
-
-
-    elif operation == "percent increase":
-        result = highest_percent_increase(df, column_name)
-        if "kindly" in question.lower():
-            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
-        elif "statistics" in question.lower():
-            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
-        elif "please" in question.lower():
-            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
-        elif "identify" in question.lower():
-            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
-        else:
-            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
-
-
-    elif operation == "percent decrease":
-        result = highest_percent_decrease(df, column_name)
-        if "kindly" in question.lower():
-            return question, f"Certainly, {result} is the {operation} count for {platform} {metric}."
-        elif "statistics" in question.lower():
-            return question, f"Indeed, the {operation} statistics for {platform} {metric} is {result}."
-        elif "please" in question.lower():
-            return question, f"Of Course, the {operation} count for {platform} {metric} that you asked for is {result}."
-        elif "identify" in question.lower():
-            return question, f"Absolutely, {result} is the count for {platform} {metric} that you are seeking. "
-        else:
-            return question, f"Sure, the {operation} value for {platform} {metric} is {result}."
-
-
-    else:
-        return "Sorry, the input is not correct."
-        pass
+    except Exception as e:
+        logging.error(f"Some error occurred in generating response, Error: {e}")
