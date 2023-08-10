@@ -137,6 +137,10 @@ def highest_percent_increase(dataframe, column_name=None):
             percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
             highest_percentage_increase = percentage_increase.max().max()
         else:
+            if dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. Percentage Increase calculation is not "
+                        f"suitable for categorical data.")
+
             old_value = dataframe[column_name].shift(1)
             percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
             highest_percentage_increase = percentage_increase.max()
@@ -163,6 +167,9 @@ def highest_percent_decrease(dataframe, column_name=None):
             percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
             highest_percent_decrease = percentage_decrease.max().max()
         else:
+            if dataframe[column_name].dtype.name in ['object', 'category']:
+                return f"Column '{column_name}' is of categorical nature. Percentage decrease calculation is not suitable for categorical data."
+
             old_value = dataframe[column_name].shift(1)
             percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
             highest_percent_decrease = percentage_decrease.max()
@@ -188,6 +195,10 @@ def standard_deviation(dataframe, column_name=None):
             std_whole_dataframe = numeric_columns.stack().std()
             return std_whole_dataframe
         else:
+            if dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. Standard deviation calculation is not "
+                        f"suitable for categorical data.")
+
             if column_name in numeric_columns:
                 std_single_column = numeric_columns[column_name].std()
                 return std_single_column
@@ -221,6 +232,10 @@ def calculate_iqr(dataframe, column_name=None):
 
             return iqr_values
         else:
+            if dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. IQR calculation is not "
+                        f"suitable for categorical data.")
+
             iqr_single_column = dataframe[column_name].quantile(0.75) - dataframe[column_name].quantile(0.25)
             return iqr_single_column
 
@@ -254,6 +269,10 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
                 outliers = dataframe[(dataframe[col] < lower_bound) | (dataframe[col] > upper_bound)][col]
                 outliers_list.extend(outliers.tolist())
         else:
+            if dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. Outliers through IQR calculation is not "
+                        f"suitable for categorical data.")
+
             q1 = dataframe[column_name].quantile(0.25)
             q3 = dataframe[column_name].quantile(0.75)
             iqr = q3 - q1
