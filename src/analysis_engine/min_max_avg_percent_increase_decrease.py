@@ -231,10 +231,10 @@ def calculate_iqr(dataframe, column_name=None):
 def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
     """
     Function to find potential outliers using the Inter-quartile Range (IQR) method.
-    @param dataframe: DataFrame containing the data
-    @param column_name: Name of the column to analyze for outliers (default is None)
-    @param threshold: IQR threshold for identifying outliers (default is 1.5)
-    @return: List of potential outlier values for specified column(s)
+    @param dataframe
+    @param column_name
+    @param threshold
+    @return: List of potential outlier values for specified column
     """
     try:
         logging.info("Task: Find potential outliers using the IQR method")
