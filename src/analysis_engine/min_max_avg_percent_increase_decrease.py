@@ -230,7 +230,7 @@ def calculate_iqr(dataframe, column_name=None):
 
 def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
     """
-    Function to find potential outliers using the Interquartile Range (IQR) method.
+    Function to find potential outliers using the Inter-quartile Range (IQR) method.
     @param dataframe: DataFrame containing the data
     @param column_name: Name of the column to analyze for outliers (default is None)
     @param threshold: IQR threshold for identifying outliers (default is 1.5)
@@ -272,13 +272,3 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
 
     except Exception as e:
         logging.error(f"Some error occurred in finding outliers, Error: {e}")
-
-
-data = pd.read_csv(campaign_data)
-df = pd.DataFrame(data)
-print("Potential Outliers using IQR in All Numeric Columns:")
-print(find_outliers_iqr(df))
-
-column_name = 'Facebook_Clicks'
-print(f"Potential Outliers using IQR in '{column_name}':")
-print(find_outliers_iqr(df, column_name))
