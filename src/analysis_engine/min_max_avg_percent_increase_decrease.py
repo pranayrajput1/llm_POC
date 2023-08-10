@@ -273,12 +273,3 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
     except Exception as e:
         logging.error(f"Some error occurred in finding outliers, Error: {e}")
 
-
-data = pd.read_csv(campaign_data)
-df = pd.DataFrame(data)
-print("Potential Outliers using IQR in All Numeric Columns:")
-print(find_outliers_iqr(df))
-
-column_name = 'Facebook_Clicks'
-print(f"Potential Outliers using IQR in '{column_name}':")
-print(find_outliers_iqr(df, column_name))
