@@ -171,3 +171,114 @@ def highest_percent_decrease(dataframe, column_name=None):
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating the percentage decrease, Error: {e}")
+
+
+def standard_deviation(dataframe, column_name=None):
+    """
+        Function to calculate the standard deviation from the dataframe and also from a specified column
+        @param dataframe
+        @param column_name
+        @return: Standard deviation value
+        """
+    try:
+        logging.info("Task: Calculate standard deviation from the dataframe")
+        numeric_columns = dataframe.select_dtypes(include=[float, int])
+
+        if column_name is None:
+            std_whole_dataframe = numeric_columns.stack().std()
+            return std_whole_dataframe
+        else:
+            if column_name in numeric_columns:
+                std_single_column = numeric_columns[column_name].std()
+                return std_single_column
+            else:
+                raise ValueError(f"Column '{column_name}' does not exist or is not numeric.")
+
+    except Exception as e:
+        logging.error(f"Some error occurred in calculating the standard deviation, Error: {e}")
+
+
+def calculate_iqr(dataframe, column_name=None):
+    """
+    Function to calculate the Inter-quartile Range (IQR) from the dataframe and also from a specified column
+    @param dataframe
+    @param column_name
+    @return: IQR value
+    """
+    try:
+        logging.info("Task: Calculate IQR from the dataframe")
+
+        if column_name is None:
+            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
+            if 'Index' in numeric_columns:
+                numeric_columns = numeric_columns.drop('Index')
+
+            iqr_values = []
+
+            for col in numeric_columns:
+                iqr = dataframe[col].quantile(0.75) - dataframe[col].quantile(0.25)
+                iqr_values.append((col, iqr))
+
+            return iqr_values
+        else:
+            iqr_single_column = dataframe[column_name].quantile(0.75) - dataframe[column_name].quantile(0.25)
+            return iqr_single_column
+
+    except Exception as e:
+        logging.error(f"Some error occurred in calculating the IQR, Error: {e}")
+
+
+def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
+    """
+    Function to find potential outliers using the Interquartile Range (IQR) method.
+    @param dataframe: DataFrame containing the data
+    @param column_name: Name of the column to analyze for outliers (default is None)
+    @param threshold: IQR threshold for identifying outliers (default is 1.5)
+    @return: List of potential outlier values for specified column(s)
+    """
+    try:
+        logging.info("Task: Find potential outliers using the IQR method")
+
+        outliers_list = []
+
+        if column_name is None:
+            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
+            for col in numeric_columns:
+                q1 = dataframe[col].quantile(0.25)
+                q3 = dataframe[col].quantile(0.75)
+                iqr = q3 - q1
+
+                lower_bound = q1 - threshold * iqr
+                upper_bound = q3 + threshold * iqr
+
+                outliers = dataframe[(dataframe[col] < lower_bound) | (dataframe[col] > upper_bound)][col]
+                outliers_list.extend(outliers.tolist())
+        else:
+            q1 = dataframe[column_name].quantile(0.25)
+            q3 = dataframe[column_name].quantile(0.75)
+            iqr = q3 - q1
+
+            lower_bound = q1 - threshold * iqr
+            upper_bound = q3 + threshold * iqr
+
+            outliers = dataframe[(dataframe[column_name] < lower_bound) | (dataframe[column_name] > upper_bound)][
+                column_name]
+            outliers_list.extend(outliers.tolist())
+
+        if len(outliers_list) == 0:
+            return None
+        else:
+            return outliers_list
+
+    except Exception as e:
+        logging.error(f"Some error occurred in finding outliers, Error: {e}")
+
+
+data = pd.read_csv(campaign_data)
+df = pd.DataFrame(data)
+print("Potential Outliers using IQR in All Numeric Columns:")
+print(find_outliers_iqr(df))
+
+column_name = 'Facebook_Clicks'
+print(f"Potential Outliers using IQR in '{column_name}':")
+print(find_outliers_iqr(df, column_name))
