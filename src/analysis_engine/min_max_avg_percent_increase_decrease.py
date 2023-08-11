@@ -382,6 +382,7 @@ def calculate_correlation(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the correlation from the dataframe column: {column_name}")
                 column_correlation = dataframe[numeric_columns].corr().loc[column_name]
+                print(column_correlation)
                 return column_correlation
 
     except Exception as e:

@@ -3,7 +3,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, \
-    highest_percent_decrease, highest_percent_increase, standard_deviation, calculate_iqr, find_outliers_iqr
+    highest_percent_decrease, highest_percent_increase, standard_deviation, calculate_iqr, find_outliers_iqr, \
+    calculate_median, calculate_covariance, calculate_correlation
 from src.utils.constants import campaign_data
 from src.utils.helpers.input_helpers import get_log
 
@@ -90,7 +91,10 @@ operations_mapping = {
     "percent decrease": highest_percent_decrease,
     "standard deviation": standard_deviation,
     "IQR": calculate_iqr,
-    "Outliers": find_outliers_iqr
+    "Outliers": find_outliers_iqr,
+    "median": calculate_median,
+    "covariance": calculate_covariance,
+    "correlation": calculate_correlation
 }
 
 
