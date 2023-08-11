@@ -124,6 +124,20 @@ def generate_response(question, result, operation, platform, metric):
     return question, default_response
 
 
+def handle_result(result):
+    """
+    handling result format when it is in dictionary or list
+    @param result
+    @return result
+    """
+    if isinstance(result, dict):
+        return ', '.join([f"'{key}': {value}" for key, value in result.items()])
+    elif isinstance(result, list):
+        return ', '.join([str(item) for item in result])
+    else:
+        return str(result)
+
+
 def select_function_based_on_keyword(question, operation, column_name):
     """
     Selecting the function to be called on the basis of the function.
@@ -141,7 +155,8 @@ def select_function_based_on_keyword(question, operation, column_name):
 
         if operation in operations_mapping:
             result = operations_mapping[operation](df, column_name)
-            response = generate_response(question, result, operation, platform, metric)
+            result_formatted = handle_result(result)
+            response = generate_response(question, result_formatted, operation, platform, metric)
             return response
         else:
             return "Sorry, the input operation is not correct."
