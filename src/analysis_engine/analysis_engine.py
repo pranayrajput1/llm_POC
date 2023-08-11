@@ -1,5 +1,5 @@
 import pandas as pd
-from src.utils.helpers.input_helpers import get_user_query, get_log
+from src.utils.helpers.input_helpers import get_log
 from src.utils.helpers.select_function import select_function_based_on_keyword, column_name, \
     build_question
 
@@ -15,7 +15,7 @@ class AnalysisEngine:
         @return function
         """
 
-        operations = ["highest", "lowest", "average","greatest","peak","least","percent increase",
+        operations = ["highest", "lowest", "average", "greatest", "peak", "least", "percent increase",
                       "percent decrease"]
         dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Youtube_Views",
                              "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",

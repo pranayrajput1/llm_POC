@@ -24,6 +24,8 @@ def get_max_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
+
         logging.debug(column_name_none)
         if column_name is None:
             max_value = dataframe[numeric_columns].max().max()
@@ -60,6 +62,7 @@ def get_min_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -97,6 +100,7 @@ def get_average(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -289,6 +293,7 @@ def calculate_median(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         if column_name is None:
             logging.debug("Task: Calculating the median from the entire dataframe")
@@ -326,12 +331,13 @@ def calculate_covariance(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
             logging.debug("Task: Calculating the covariance from the entire dataframe")
             calculated_covariance = dataframe[numeric_columns].cov()
-            return calculated_covariance
+            return calculated_covariance.to_dict()
         else:
             logging.debug(f"Columns name is provided: '{column_name}'")
             if column_name not in dataframe.columns:
@@ -345,7 +351,7 @@ def calculate_covariance(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the covariance from the dataframe column: {column_name}")
                 column_covariance = dataframe[numeric_columns].cov().loc[column_name]
-                return column_covariance
+                return column_covariance.to_dict()
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating covariance, Error: {e}")
@@ -365,12 +371,13 @@ def calculate_correlation(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
             logging.debug("Task: Calculating the correlation from the entire dataframe")
             calculated_correlation = dataframe[numeric_columns].corr()
-            return calculated_correlation
+            return calculated_correlation.to_dict()
 
         else:
             logging.debug(f"Columns name is provided: '{column_name}'")
@@ -385,7 +392,8 @@ def calculate_correlation(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the correlation from the dataframe column: {column_name}")
                 column_correlation = dataframe[numeric_columns].corr().loc[column_name]
-                return column_correlation
+                return column_correlation.to_dict()
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating covariance, Error: {e}")
+

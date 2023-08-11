@@ -31,6 +31,7 @@ def test_get_max_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -68,6 +69,7 @@ def test_get_min_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -105,6 +107,7 @@ def test_get_average(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -144,6 +147,7 @@ def test_calculate_median(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         if column_name is None:
             logging.debug("Task: Calculating the median from the entire dataframe")
@@ -181,12 +185,13 @@ def test_calculate_covariance(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
             logging.debug("Task: Calculating the covariance from the entire dataframe")
             calculated_covariance = dataframe[numeric_columns].cov()
-            return calculated_covariance
+            return calculated_covariance.to_dict()
         else:
             logging.debug(f"Columns name is provided: '{column_name}'")
             if column_name not in dataframe.columns:
@@ -200,7 +205,7 @@ def test_calculate_covariance(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the covariance from the dataframe column: {column_name}")
                 column_covariance = dataframe[numeric_columns].cov().loc[column_name]
-                return column_covariance
+                return column_covariance.to_dict()
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating covariance, Error: {e}")
@@ -220,12 +225,13 @@ def test_calculate_correlation(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
 
         logging.debug(column_name_none)
         if column_name is None:
             logging.debug("Task: Calculating the correlation from the entire dataframe")
             calculated_correlation = dataframe[numeric_columns].corr()
-            return calculated_correlation
+            return calculated_correlation.to_dict()
 
         else:
             logging.debug(f"Columns name is provided: '{column_name}'")
@@ -240,7 +246,7 @@ def test_calculate_correlation(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the correlation from the dataframe column: {column_name}")
                 column_correlation = dataframe[numeric_columns].corr().loc[column_name]
-                return column_correlation
+                return column_correlation.to_dict()
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating covariance, Error: {e}")
@@ -322,6 +328,8 @@ class AnalysisEngineTest(unittest.TestCase):
         response = test_calculate_median(data_frame)
 
         numeric_columns = data_frame.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
+
         calculated_median = np.median(data_frame[numeric_columns].values)
         self.assertEqual(response, calculated_median)
 
@@ -349,10 +357,10 @@ class AnalysisEngineTest(unittest.TestCase):
         response = test_calculate_covariance(data_frame)
 
         numeric_columns = data_frame.select_dtypes(include=[np.number]).columns
-        calculated_covariance = data_frame[numeric_columns].cov()
+        numeric_columns = numeric_columns.drop('Index')
 
-        are_series_equal = response.equals(calculated_covariance)
-        self.assertTrue(are_series_equal)
+        calculated_covariance = data_frame[numeric_columns].cov()
+        self.assertTrue(response, calculated_covariance.to_dict())
 
     def test_three_for_covariance(self):
         data_frame = pd.DataFrame(sample_dataframe)
@@ -366,9 +374,10 @@ class AnalysisEngineTest(unittest.TestCase):
         response = test_calculate_covariance(data_frame, column_name)
 
         numeric_columns = data_frame.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
+
         column_covariance = data_frame[numeric_columns].cov().loc[column_name]
-        are_series_equal = response.equals(column_covariance)
-        self.assertTrue(are_series_equal)
+        self.assertEqual(response, column_covariance.to_dict())
 
     def test_one_for_correlation(self):
         data_frame = pd.DataFrame(sample_dataframe)
@@ -381,10 +390,10 @@ class AnalysisEngineTest(unittest.TestCase):
         response = test_calculate_correlation(data_frame)
 
         numeric_columns = data_frame.select_dtypes(include=[np.number]).columns
-        calculated_correlation = data_frame[numeric_columns].corr()
+        numeric_columns = numeric_columns.drop('Index')
 
-        are_series_equal = response.equals(calculated_correlation)
-        self.assertTrue(are_series_equal)
+        calculated_correlation = data_frame[numeric_columns].corr()
+        self.assertTrue(response, calculated_correlation.to_dict())
 
     def test_three_for_correlation(self):
         data_frame = pd.DataFrame(sample_dataframe)
@@ -398,9 +407,10 @@ class AnalysisEngineTest(unittest.TestCase):
         response = test_calculate_correlation(data_frame, column_name)
 
         numeric_columns = data_frame.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('Index')
+
         column_correlation = data_frame[numeric_columns].corr().loc[column_name]
-        are_series_equal = response.equals(column_correlation)
-        self.assertTrue(are_series_equal)
+        self.assertEqual(response, column_correlation.to_dict())
 
 
 if __name__ == '__main__':
