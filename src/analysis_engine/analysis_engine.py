@@ -15,9 +15,9 @@ class AnalysisEngine:
         @return function
         """
 
-        operations = ["highest", "lowest", "average","greatest","peak","least","percent increase",
-                      "percent decrease","standard deviation","IQR","Outliers","median","covariance","correlation"]
-
+        operations = ["highest", "lowest", "average", "greatest", "peak", "least", "percent increase",
+                      "percent decrease", "standard deviation", "IQR", "Outliers", "median", "covariance",
+                      "correlation"]
 
         dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Youtube_Views",
                              "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",
