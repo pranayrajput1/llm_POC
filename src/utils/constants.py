@@ -18,6 +18,6 @@ action_list = ["views", "clicks", "bought", "subscription", "followers"]
 
 numeric_value_constant = "Task: Getting numerical columns from tha dataframe"
 column_name_none = "Task: Checking if column_name is None"
-categorical_col_issue = "Sorry can't perform the maximum operation on categorical columns"
+categorical_col_issue = "Sorry can't perform this operation on categorical columns"
 
 categorical_col_check = "Checking is provided column values are categorical"
