@@ -137,8 +137,11 @@ def highest_percent_increase(dataframe, column_name=None):
             percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
             highest_percentage_increase = percentage_increase.max().max()
         else:
-            if dataframe[column_name].dtype.name in ['object', 'category']:
-                return (f"Column '{column_name}' is of categorical nature. Percentage Increase calculation is not "
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature percentage increase calculation is not "
                         f"suitable for categorical data.")
 
             old_value = dataframe[column_name].shift(1)
@@ -167,8 +170,12 @@ def highest_percent_decrease(dataframe, column_name=None):
             percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
             highest_percent_decrease = percentage_decrease.max().max()
         else:
-            if dataframe[column_name].dtype.name in ['object', 'category']:
-                return f"Column '{column_name}' is of categorical nature. Percentage decrease calculation is not suitable for categorical data."
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature percentage decrease calculation is not "
+                        f"suitable for categorical data.")
 
             old_value = dataframe[column_name].shift(1)
             percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
@@ -195,15 +202,16 @@ def standard_deviation(dataframe, column_name=None):
             std_whole_dataframe = numeric_columns.stack().std()
             return std_whole_dataframe
         else:
-            if dataframe[column_name].dtype.name in ['object', 'category']:
-                return (f"Column '{column_name}' is of categorical nature. Standard deviation calculation is not "
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature standard deviation calculation is not "
                         f"suitable for categorical data.")
 
-            if column_name in numeric_columns:
+            elif column_name in numeric_columns:
                 std_single_column = numeric_columns[column_name].std()
                 return std_single_column
-            else:
-                raise ValueError(f"Column '{column_name}' does not exist or is not numeric.")
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating the standard deviation, Error: {e}")
@@ -232,7 +240,10 @@ def calculate_iqr(dataframe, column_name=None):
 
             return iqr_values
         else:
-            if dataframe[column_name].dtype.name in ['object', 'category']:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
                 return (f"Column '{column_name}' is of categorical nature. IQR calculation is not "
                         f"suitable for categorical data.")
 
@@ -246,10 +257,10 @@ def calculate_iqr(dataframe, column_name=None):
 def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
     """
     Function to find potential outliers using the Interquartile Range (IQR) method.
-    @param dataframe: DataFrame containing the data
-    @param column_name: Name of the column to analyze for outliers (default is None)
-    @param threshold: IQR threshold for identifying outliers (default is 1.5)
-    @return: List of potential outlier values for specified column(s)
+    @param dataframe
+    @param column_name
+    @param threshold
+    @return: List of potential outlier values for specified columns
     """
     try:
         logging.info("Task: Find potential outliers using the IQR method")
@@ -269,7 +280,10 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
                 outliers = dataframe[(dataframe[col] < lower_bound) | (dataframe[col] > upper_bound)][col]
                 outliers_list.extend(outliers.tolist())
         else:
-            if dataframe[column_name].dtype.name in ['object', 'category']:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
                 return (f"Column '{column_name}' is of categorical nature. Outliers through IQR calculation is not "
                         f"suitable for categorical data.")
 
@@ -291,4 +305,3 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
 
     except Exception as e:
         logging.error(f"Some error occurred in finding outliers, Error: {e}")
-
