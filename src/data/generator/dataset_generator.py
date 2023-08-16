@@ -40,11 +40,11 @@ class DataGenerator:
         creating dataframe from all the data and adding also adding an index column
         return : df
         """
-        Index = range(1, 181)
         df = pd.DataFrame(data, columns=['User', 'Date', 'Facebook_Clicks', 'Facebook_Views', 'Facebook_bought',
                                          'Youtube_Views',
                                          'Youtube_Clicks', 'Youtube_Followers', 'Youtube_bought',
                                          'Youtube_Subscription',
                                          'Instagram_Views', 'Instagram_Clicks', 'Instagram_Followers'])
-        df.insert(0, 'Index', Index)
+        start_user_id = 1001
+        df.insert(0, 'User ID', range(start_user_id, len(df) + start_user_id))
         return df

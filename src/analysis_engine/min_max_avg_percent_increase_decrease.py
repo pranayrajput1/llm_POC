@@ -21,7 +21,7 @@ def get_max_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -59,7 +59,7 @@ def get_min_value(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -97,7 +97,7 @@ def get_average(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -212,8 +212,8 @@ def calculate_iqr(dataframe, column_name=None):
 
         if column_name is None:
             numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
-            if 'Index' in numeric_columns:
-                numeric_columns = numeric_columns.drop('Index')
+            if 'User ID' in numeric_columns:
+                numeric_columns = numeric_columns.drop('User ID')
 
             iqr_values = []
 
@@ -290,7 +290,7 @@ def calculate_median(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         if column_name is None:
             logging.debug("Task: Calculating the median from the entire dataframe")
@@ -328,7 +328,7 @@ def calculate_covariance(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         logging.debug(column_name_none)
         if column_name is None:
@@ -368,7 +368,7 @@ def calculate_correlation(dataframe, column_name=None):
 
         logging.debug(numeric_value_constant)
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
-        numeric_columns = numeric_columns.drop('Index')
+        numeric_columns = numeric_columns.drop('User ID')
 
         logging.debug(column_name_none)
         if column_name is None:
