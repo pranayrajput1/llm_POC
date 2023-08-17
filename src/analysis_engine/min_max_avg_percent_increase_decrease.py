@@ -26,6 +26,9 @@ def get_max_value(dataframe, column_name=None):
         logging.debug(column_name_none)
         if column_name is None:
             max_value = dataframe[numeric_columns].max().max()
+            column_with_max = dataframe[numeric_columns].max().idxmax()
+            logging.debug(f"Task: Returning the maximum value: {max_value} from column: {column_with_max}")
+            return max_value, column_with_max
         else:
             if column_name not in dataframe.columns:
                 logging.debug(f"Task: Checking if column_name: {column_name} is in dataframe")
@@ -38,9 +41,8 @@ def get_max_value(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the maximum value from the dataframe column: {column_name}")
                 max_value = dataframe[column_name].max()
-
-        logging.debug(f"Task: Returning the maximum value: {max_value}")
-        return max_value
+                logging.debug(f"Task: Returning the maximum value: {max_value}")
+                return max_value
 
     except Exception as e:
         logging.error(f"Some error occurred in getting the maximum value from the data, Error: {e}")
@@ -64,6 +66,9 @@ def get_min_value(dataframe, column_name=None):
         logging.debug(column_name_none)
         if column_name is None:
             min_value = dataframe[numeric_columns].min().min()
+            column_with_max = dataframe[numeric_columns].max().idxmax()
+            logging.debug(f"Task: Returning the minimum value: {min_value} from column: {column_with_max}")
+            return min_value, column_with_max
         else:
             if column_name not in dataframe.columns:
                 logging.debug(f"Task: Checking if column_name: {column_name} is in dataframe")
@@ -76,9 +81,8 @@ def get_min_value(dataframe, column_name=None):
             else:
                 logging.debug(f"Task: Calculating the minimum value from the dataframe column: {column_name}")
                 min_value = dataframe[column_name].min()
-
-        logging.debug(f"Task: Returning the minimum value: {min_value}")
-        return min_value
+                logging.debug(f"Task: Returning the minimum value: {min_value}")
+                return min_value
 
     except Exception as e:
         logging.error(f"Some error occurred in getting the minimum value from the data, Error: {e}")
@@ -102,6 +106,9 @@ def get_average(dataframe, column_name=None):
         logging.debug(column_name_none)
         if column_name is None:
             average_value = dataframe[numeric_columns].mean().mean()
+            column_with_max = dataframe[numeric_columns].max().idxmax()
+            logging.debug(f"Task: Returning the average value: {average_value} from column: {column_with_max}")
+            return average_value, column_with_max
         else:
             if column_name not in dataframe.columns:
                 logging.debug(f"Task: Checking if column_name: {column_name} is in dataframe")
@@ -132,9 +139,11 @@ def highest_percent_increase(dataframe, column_name=None):
     """
     try:
         logging.info("Task: Get dataframe and calculate the percent increase value from a specific column")
+        numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('User ID')
 
+        #TODO weekely/monthly/yearly calculation
         if column_name is None:
-            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
             old_values = dataframe[numeric_columns].shift(1)
             percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
             highest_percentage_increase = percentage_increase.max().max()
@@ -158,9 +167,11 @@ def highest_percent_decrease(dataframe, column_name=None):
     """
     try:
         logging.info("Task: Get dataframe and calculate the percent decrease value from a specific column")
+        numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('User ID')
 
+        #TODO weekely/monthly/yearly
         if column_name is None:
-            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
             old_values = dataframe[numeric_columns].shift(1)
             percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
             highest_percent_decrease = percentage_decrease.max().max()
@@ -184,7 +195,8 @@ def standard_deviation(dataframe, column_name=None):
         """
     try:
         logging.info("Task: Calculate standard deviation from the dataframe")
-        numeric_columns = dataframe.select_dtypes(include=[float, int])
+        numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+        numeric_columns = numeric_columns.drop('User ID')
 
         if column_name is None:
             std_whole_dataframe = numeric_columns.stack().std()
@@ -211,12 +223,11 @@ def calculate_iqr(dataframe, column_name=None):
         logging.info("Task: Calculate IQR from the dataframe")
 
         if column_name is None:
-            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
-            if 'User ID' in numeric_columns:
-                numeric_columns = numeric_columns.drop('User ID')
+            numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+            numeric_columns = numeric_columns.drop('User ID')
 
             iqr_values = []
-
+            #TODO return ranges
             for col in numeric_columns:
                 iqr = dataframe[col].quantile(0.75) - dataframe[col].quantile(0.25)
                 iqr_values.append((col, iqr))
@@ -244,7 +255,9 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
         outliers_list = []
 
         if column_name is None:
-            numeric_columns = dataframe.select_dtypes(include=[float, int]).columns
+            numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
+            numeric_columns = numeric_columns.drop('User ID')
+
             for col in numeric_columns:
                 q1 = dataframe[col].quantile(0.25)
                 q3 = dataframe[col].quantile(0.75)

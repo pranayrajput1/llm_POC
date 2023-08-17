@@ -1,5 +1,9 @@
+from itertools import product
+
 import pandas as pd
 import numpy as np
+
+from src.utils.constants import columns
 
 
 class DataGenerator:
@@ -13,24 +17,23 @@ class DataGenerator:
         return : data
         """
         data = []
-        for date in self.dates:
-            for user in self.users:
-                Facebook_Clicks = np.random.randint(1, 10000)
-                Facebook_Views = np.random.randint(1, 10000)
-                Facebook_bought = np.random.randint(1, 1000)
-                Youtube_Views = np.random.randint(1, 10000)
-                Youtube_Clicks = np.random.randint(1, 10000)
-                Youtube_Followers = np.random.randint(1, 1000000)
-                Youtube_bought = np.random.randint(1, 1000)
-                Youtube_Subscription = np.random.randint(1, 100000)
-                Instagram_Views = np.random.randint(1, 10000)
-                Instagram_Clicks = np.random.randint(1, 10000)
-                Instagram_Followers = np.random.randint(1, 1000000)
+        for date, user in product(self.dates, self.users):
+            Facebook_Clicks = np.random.randint(1, 10000)
+            Facebook_Views = np.random.randint(1, 10000)
+            Facebook_bought = np.random.randint(1, 1000)
+            Youtube_Views = np.random.randint(1, 10000)
+            Youtube_Clicks = np.random.randint(1, 10000)
+            Youtube_Followers = np.random.randint(1, 1000000)
+            Youtube_bought = np.random.randint(1, 1000)
+            Youtube_Subscription = np.random.randint(1, 100000)
+            Instagram_Views = np.random.randint(1, 10000)
+            Instagram_Clicks = np.random.randint(1, 10000)
+            Instagram_Followers = np.random.randint(1, 1000000)
 
-                data.append(
-                    [user, date.date(), Facebook_Clicks, Facebook_Views, Facebook_bought, Youtube_Views, Youtube_Clicks,
-                     Youtube_Followers, Youtube_bought, Youtube_Subscription, Instagram_Views, Instagram_Clicks,
-                     Instagram_Followers])
+            data.append(
+                [user, date.date(), Facebook_Clicks, Facebook_Views, Facebook_bought, Youtube_Views, Youtube_Clicks,
+                 Youtube_Followers, Youtube_bought, Youtube_Subscription, Instagram_Views, Instagram_Clicks,
+                 Instagram_Followers])
 
         return data
 
@@ -40,11 +43,7 @@ class DataGenerator:
         creating dataframe from all the data and adding also adding an index column
         return : df
         """
-        df = pd.DataFrame(data, columns=['User', 'Date', 'Facebook_Clicks', 'Facebook_Views', 'Facebook_bought',
-                                         'Youtube_Views',
-                                         'Youtube_Clicks', 'Youtube_Followers', 'Youtube_bought',
-                                         'Youtube_Subscription',
-                                         'Instagram_Views', 'Instagram_Clicks', 'Instagram_Followers'])
+        df = pd.DataFrame(data, columns=columns)
         start_user_id = 1001
         df.insert(0, 'User ID', range(start_user_id, len(df) + start_user_id))
         return df

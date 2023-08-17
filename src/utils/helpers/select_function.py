@@ -5,7 +5,7 @@ from nltk.tokenize import word_tokenize
 from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, \
     highest_percent_decrease, highest_percent_increase, standard_deviation, calculate_iqr, find_outliers_iqr, \
     calculate_median, calculate_covariance, calculate_correlation
-from src.utils.constants import campaign_data
+from src.utils.constants import campaign_data, dataframe_columns
 from src.utils.helpers.input_helpers import get_log
 
 logging = get_log()
@@ -61,9 +61,6 @@ def column_name(question):
     @param question
     @return matching_columns
     """
-    dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Youtube_Views",
-                         "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",
-                         "Instagram_Views", "Instagram_Clicks", "Instagram_Followers"]
     dataframe_columns_lower = [column.lower() for column in dataframe_columns]
 
     candidates_list = preprocess_question([question])
@@ -80,24 +77,6 @@ def column_name(question):
     return matching_columns_list[0] if matching_columns_list else None
 
 
-operations_mapping = {
-    "highest": get_max_value,
-    "greatest": get_max_value,
-    "peak": get_max_value,
-    "lowest": get_min_value,
-    "least": get_min_value,
-    "average": get_average,
-    "percent increase": highest_percent_increase,
-    "percent decrease": highest_percent_decrease,
-    "standard deviation": standard_deviation,
-    "IQR": calculate_iqr,
-    "Outliers": find_outliers_iqr,
-    "median": calculate_median,
-    "covariance": calculate_covariance,
-    "correlation": calculate_correlation
-}
-
-
 def generate_response(question, result, operation, platform, metric):
     """
     generating response through all the parameters.
@@ -108,6 +87,7 @@ def generate_response(question, result, operation, platform, metric):
     @param metric
     @return question and answer
     """
+
     keyword_responses = {
         "kindly": f"Certainly, {result} is the {operation} count for {platform} {metric}.",
         "statistics": f"Indeed, the {operation} statistics for {platform} {metric} is {result}.",
@@ -136,6 +116,24 @@ def handle_result(result):
         return ', '.join([str(item) for item in result])
     else:
         return str(result)
+
+
+operations_mapping = {
+    "highest": get_max_value,
+    "greatest": get_max_value,
+    "peak": get_max_value,
+    "lowest": get_min_value,
+    "least": get_min_value,
+    "average": get_average,
+    "percent increase": highest_percent_increase,
+    "percent decrease": highest_percent_decrease,
+    "standard deviation": standard_deviation,
+    "IQR": calculate_iqr,
+    "Outliers": find_outliers_iqr,
+    "median": calculate_median,
+    "covariance": calculate_covariance,
+    "correlation": calculate_correlation
+}
 
 
 def select_function_based_on_keyword(question, operation, column_name):

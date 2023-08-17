@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pandas as pd
+
 path = Path(__file__).resolve().parent.parent
 
 data_dir = path / "data"
@@ -15,6 +17,27 @@ user_variable = "user"
 
 platform_list = ["facebook", "youtube", "instagram"]
 action_list = ["views", "clicks", "bought", "subscription", "followers"]
+
+users = ['Ram', 'Aman', 'Durgesh']
+dates = pd.date_range(start='2023-01-01', end='2023-03-01', freq='D')
+
+# dataset all columns
+columns = ['User', 'Date', 'Facebook_Clicks', 'Facebook_Views', 'Facebook_bought',
+           'Youtube_Views',
+           'Youtube_Clicks', 'Youtube_Followers', 'Youtube_bought',
+           'Youtube_Subscription',
+           'Instagram_Views', 'Instagram_Clicks', 'Instagram_Followers']
+
+# operations in analysis engine
+operations = ["highest", "lowest", "average", "greatest", "peak", "least", "percent increase",
+              "percent decrease", "standard deviation", "IQR", "Outliers", "median", "covariance",
+              "correlation"]
+
+# numeric columns in the dataframe
+dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Youtube_Views",
+                     "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",
+                     "Instagram_Views", "Instagram_Clicks", "Instagram_Followers"]
+
 
 numeric_value_constant = "Task: Getting numerical columns from tha dataframe"
 column_name_none = "Task: Checking if column_name is None"
