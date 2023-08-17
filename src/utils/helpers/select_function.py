@@ -5,7 +5,7 @@ from nltk.tokenize import word_tokenize
 from src.analysis_engine.min_max_avg_percent_increase_decrease import get_max_value, get_min_value, get_average, \
     highest_percent_decrease, highest_percent_increase, standard_deviation, calculate_iqr, find_outliers_iqr, \
     calculate_median, calculate_covariance, calculate_correlation
-from src.utils.constants import campaign_data, dataframe_columns
+from src.utils.constants import campaign_data, dataframe_columns, intervals
 from src.utils.helpers.input_helpers import get_log
 
 logging = get_log()
@@ -152,10 +152,11 @@ def select_function_based_on_keyword(question, operation, column_name):
         platform, metric = column_name.split("_")
 
         if operation in operations_mapping:
-            result = operations_mapping[operation](df, column_name)
-            result_formatted = handle_result(result)
-            response = generate_response(question, result_formatted, operation, platform, metric)
-            return response
+            for interval in intervals:
+                result = operations_mapping[operation](df,column_name,interval)
+                result_formatted = handle_result(result)
+                response = generate_response(question, result_formatted, operation, platform, metric)
+                return response
         else:
             return "Sorry, the input operation is not correct."
 
