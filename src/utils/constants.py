@@ -21,6 +21,9 @@ action_list = ["views", "clicks", "bought", "subscription", "followers"]
 users = ['Ram', 'Aman', 'Durgesh']
 dates = pd.date_range(start='2023-01-01', end='2023-03-01', freq='D')
 
+primary_key = "User ID"
+intervals = ['W']
+
 # dataset all columns
 columns = ['User', 'Date', 'Facebook_Clicks', 'Facebook_Views', 'Facebook_bought',
            'Youtube_Views',
@@ -38,6 +41,8 @@ dataframe_columns = ["Facebook_Clicks", "Facebook_Views", "Facebook_bought", "Yo
                      "Youtube_Clicks", "Youtube_Followers", "Youtube_bought", "Youtube_Subscription",
                      "Instagram_Views", "Instagram_Clicks", "Instagram_Followers"]
 
+# threshold for function finding outliers using IQR function
+threshold = 1.5
 
 numeric_value_constant = "Task: Getting numerical columns from tha dataframe"
 column_name_none = "Task: Checking if column_name is None"
