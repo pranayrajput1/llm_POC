@@ -142,12 +142,19 @@ def highest_percent_increase(dataframe, column_name=None):
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
         numeric_columns = numeric_columns.drop('User ID')
 
-        #TODO weekely/monthly/yearly calculation
+        # TODO weekely/monthly/yearly calculation
         if column_name is None:
             old_values = dataframe[numeric_columns].shift(1)
             percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
             highest_percentage_increase = percentage_increase.max().max()
         else:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature percentage increase calculation is not "
+                        f"suitable for categorical data.")
+
             old_value = dataframe[column_name].shift(1)
             percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
             highest_percentage_increase = percentage_increase.max()
@@ -170,12 +177,19 @@ def highest_percent_decrease(dataframe, column_name=None):
         numeric_columns = dataframe.select_dtypes(include=[np.number]).columns
         numeric_columns = numeric_columns.drop('User ID')
 
-        #TODO weekely/monthly/yearly
+        # TODO weekely/monthly/yearly
         if column_name is None:
             old_values = dataframe[numeric_columns].shift(1)
             percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
             highest_percent_decrease = percentage_decrease.max().max()
         else:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature percentage decrease calculation is not "
+                        f"suitable for categorical data.")
+
             old_value = dataframe[column_name].shift(1)
             percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
             highest_percent_decrease = percentage_decrease.max()
@@ -202,11 +216,16 @@ def standard_deviation(dataframe, column_name=None):
             std_whole_dataframe = numeric_columns.stack().std()
             return std_whole_dataframe
         else:
-            if column_name in numeric_columns:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature standard deviation calculation is not "
+                        f"suitable for categorical data.")
+
+            elif column_name in numeric_columns:
                 std_single_column = numeric_columns[column_name].std()
                 return std_single_column
-            else:
-                raise ValueError(f"Column '{column_name}' does not exist or is not numeric.")
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating the standard deviation, Error: {e}")
@@ -227,13 +246,20 @@ def calculate_iqr(dataframe, column_name=None):
             numeric_columns = numeric_columns.drop('User ID')
 
             iqr_values = []
-            #TODO return ranges
+            # TODO return ranges
             for col in numeric_columns:
                 iqr = dataframe[col].quantile(0.75) - dataframe[col].quantile(0.25)
                 iqr_values.append((col, iqr))
 
             return iqr_values
         else:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. IQR calculation is not "
+                        f"suitable for categorical data.")
+
             iqr_single_column = dataframe[column_name].quantile(0.75) - dataframe[column_name].quantile(0.25)
             return iqr_single_column
 
@@ -269,6 +295,13 @@ def find_outliers_iqr(dataframe, column_name=None, threshold=1.5):
                 outliers = dataframe[(dataframe[col] < lower_bound) | (dataframe[col] > upper_bound)][col]
                 outliers_list.extend(outliers.tolist())
         else:
+            if column_name not in dataframe.columns:
+                return f"Column '{column_name}' does not exist in the dataframe."
+
+            elif dataframe[column_name].dtype.name in ['object', 'category']:
+                return (f"Column '{column_name}' is of categorical nature. Outliers through IQR calculation is not "
+                        f"suitable for categorical data.")
+
             q1 = dataframe[column_name].quantile(0.25)
             q3 = dataframe[column_name].quantile(0.75)
             iqr = q3 - q1
@@ -407,4 +440,3 @@ def calculate_correlation(dataframe, column_name=None):
 
     except Exception as e:
         logging.error(f"Some error occurred in calculating covariance, Error: {e}")
-

@@ -25,6 +25,13 @@ class Testing_Functionalities:
                 percentage_increase = ((dataframe[numeric_columns] - old_values) / old_values) * 100
                 highest_percentage_increase = percentage_increase.max().max()
             else:
+                if column_name not in dataframe.columns:
+                    return f"Column '{column_name}' does not exist in the dataframe."
+
+                elif dataframe[column_name].dtype.name in ['object', 'category']:
+                    return (f"Column '{column_name}' is of categorical nature percentage increase calculation is not "
+                            f"suitable for categorical data.")
+
                 old_value = dataframe[column_name].shift(1)
                 percentage_increase = ((dataframe[column_name] - old_value) / old_value) * 100
                 highest_percentage_increase = percentage_increase.max()
@@ -50,6 +57,13 @@ class Testing_Functionalities:
                 percentage_decrease = ((old_values - dataframe[numeric_columns]) / old_values) * 100
                 highest_percent_decrease = percentage_decrease.max().max()
             else:
+                if column_name not in dataframe.columns:
+                    return f"Column '{column_name}' does not exist in the dataframe."
+
+                elif dataframe[column_name].dtype.name in ['object', 'category']:
+                    return (f"Column '{column_name}' is of categorical nature percentage decrease calculation is not "
+                            f"suitable for categorical data.")
+
                 old_value = dataframe[column_name].shift(1)
                 percentage_decrease = ((old_value - dataframe[column_name]) / old_value) * 100
                 highest_percent_decrease = percentage_decrease.max()
@@ -74,11 +88,16 @@ class Testing_Functionalities:
                 std_whole_dataframe = numeric_columns.stack().std()
                 return std_whole_dataframe
             else:
-                if column_name in numeric_columns:
+                if column_name not in dataframe.columns:
+                    return f"Column '{column_name}' does not exist in the dataframe."
+
+                elif dataframe[column_name].dtype.name in ['object', 'category']:
+                    return (f"Column '{column_name}' is of categorical nature standard deviation calculation is not "
+                            f"suitable for categorical data.")
+
+                elif column_name in numeric_columns:
                     std_single_column = numeric_columns[column_name].std()
                     return std_single_column
-                else:
-                    raise ValueError(f"Column '{column_name}' does not exist or is not numeric.")
 
         except Exception as e:
             logging.error(f"Some error occurred in calculating the standard deviation, Error: {e}")
@@ -106,6 +125,13 @@ class Testing_Functionalities:
 
                 return iqr_values
             else:
+                if column_name not in dataframe.columns:
+                    return f"Column '{column_name}' does not exist in the dataframe."
+
+                elif dataframe[column_name].dtype.name in ['object', 'category']:
+                    return (f"Column '{column_name}' is of categorical nature. IQR calculation is not "
+                            f"suitable for categorical data.")
+
                 iqr_single_column = dataframe[column_name].quantile(0.75) - dataframe[column_name].quantile(0.25)
                 return iqr_single_column
 
@@ -115,9 +141,9 @@ class Testing_Functionalities:
     def find_outliers_iqr(self, dataframe, column_name=None, threshold=1.5):
         """
         Function to find potential outliers using the Interquartile Range (IQR) method.
-        @param dataframe: DataFrame containing the data
-        @param column_name: Name of the column to analyze for outliers (default is None)
-        @param threshold: IQR threshold for identifying outliers (default is 1.5)
+        @param dataframe
+        @param column_name
+        @param threshold
         @return: List of potential outlier values for specified column(s)
         """
         try:
@@ -138,6 +164,13 @@ class Testing_Functionalities:
                     outliers = dataframe[(dataframe[col] < lower_bound) | (dataframe[col] > upper_bound)][col]
                     outliers_list.extend(outliers.tolist())
             else:
+                if column_name not in dataframe.columns:
+                    return f"Column '{column_name}' does not exist in the dataframe."
+
+                elif dataframe[column_name].dtype.name in ['object', 'category']:
+                    return (f"Column '{column_name}' is of categorical nature. Outliers through IQR calculation is not "
+                            f"suitable for categorical data.")
+
                 q1 = dataframe[column_name].quantile(0.25)
                 q3 = dataframe[column_name].quantile(0.75)
                 iqr = q3 - q1
@@ -170,6 +203,13 @@ class Test_class(unittest.TestCase):
         result_column = testing_func.highest_percent_increase(df, 'Facebook_Views')
         self.assertEqual(result_column, 14406.521739130434)
 
+        result1 = testing_func.highest_percent_increase(df,'User')
+        self.assertEqual(result1,"Column 'User' is of categorical nature percentage increase calculation is not "
+                            f"suitable for categorical data.")
+
+        result2 = testing_func.highest_percent_increase(df,'facebook')
+        self.assertEqual(result2,"Column 'facebook' does not exist in the dataframe.")
+
     def test_highest_percent_decrease(self):
         data = pd.read_csv(campaign_data)
         df = pd.DataFrame(data)
@@ -181,6 +221,14 @@ class Test_class(unittest.TestCase):
         result_column = testing_func.highest_percent_decrease(df, 'Facebook_Clicks')
         self.assertEqual(result_column, 99.62088072324293)
 
+        result1 = testing_func.highest_percent_decrease(df, 'User')
+        print(result1)
+        self.assertEqual(result1, "Column 'User' is of categorical nature percentage decrease calculation is not "
+                            f"suitable for categorical data.")
+
+        result2 = testing_func.highest_percent_increase(df, 'facebook')
+        self.assertEqual(result2, "Column 'facebook' does not exist in the dataframe.")
+
     def test_for_standard_deviation(self):
         data = pd.read_csv(campaign_data)
         df = pd.DataFrame(data)
@@ -191,6 +239,13 @@ class Test_class(unittest.TestCase):
 
         result_column = testing_func.standard_deviation(df, 'Facebook_Clicks')
         self.assertEqual(result_column, 2920.6616063820907)
+
+        result1 = testing_func.standard_deviation(df, 'User')
+        self.assertEqual(result1, "Column 'User' is of categorical nature standard deviation calculation is not "
+                            f"suitable for categorical data.")
+
+        result2 = testing_func.standard_deviation(df, 'facebook')
+        self.assertEqual(result2, "Column 'facebook' does not exist in the dataframe.")
 
     def test_for_iqr(self):
         data = pd.read_csv(campaign_data)
@@ -207,6 +262,13 @@ class Test_class(unittest.TestCase):
         result_column = testing_func.calculate_iqr(df, 'Facebook_Clicks')
         self.assertEqual(result_column, 4916.5)
 
+        result1 = testing_func.calculate_iqr(df, 'User')
+        self.assertEqual(result1, "Column 'User' is of categorical nature. IQR calculation is not "
+                            f"suitable for categorical data.")
+
+        result2 = testing_func.calculate_iqr(df, 'facebook')
+        self.assertEqual(result2, "Column 'facebook' does not exist in the dataframe.")
+
     def test_for_outliers(self):
         data = pd.read_csv(campaign_data)
         df = pd.DataFrame(data)
@@ -217,3 +279,11 @@ class Test_class(unittest.TestCase):
 
         result_column = testing_func.find_outliers_iqr(df, 'Facebook_Clicks')
         self.assertEqual(result_column, None)
+
+        result1 = testing_func.find_outliers_iqr(df, 'User')
+        self.assertEqual(result1, "Column 'User' is of categorical nature. Outliers through IQR calculation is not "
+                            f"suitable for categorical data.")
+
+        result2 = testing_func.find_outliers_iqr(df, 'facebook')
+        self.assertEqual(result2, "Column 'facebook' does not exist in the dataframe.")
+
