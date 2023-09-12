@@ -1,5 +1,5 @@
 ### Environment & Interpreter
-> Conda 23.5.2, Python3.10
+> Conda 23.5.2, Python3.8
 
 # Unified POC
 

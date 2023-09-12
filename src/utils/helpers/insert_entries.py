@@ -1,7 +1,7 @@
 import pandas as pd
 from src.db.db_connection import db_connection
 from src.utils.constants import campaign_data, table_name
-from src.utils.helpers.log_setup import get_log
+from src.utils.helpers.input_helpers import get_log
 
 # getting log setup
 logging = get_log()
@@ -29,11 +29,10 @@ def insert_data_into_mysql(csv_file, db_config, table):
         logging.debug("Getting columns from dataframe")
         columns = ", ".join(df.columns)
 
-        logging.debug("Converting columns name to lower case")
-        columns = columns.lower()
+        # logging.debug("Converting columns name to lower case")
+        # columns = columns.lower()
 
-        query_template = f"INSERT INTO sadd ({columns}) VALUES ({', '.join(['%s'] * len(df.columns))})"
-
+        query_template = f"INSERT INTO {table_name} ({columns}) VALUES ({', '.join(['%s'] * len(df.columns))})"
         data = [tuple(row) for row in df.itertuples(index=False)]
 
         logging.info("Insert data into the MySQL table using executemany")
@@ -75,4 +74,4 @@ def insert_data_into_mysql(csv_file, db_config, table):
 
 
 """comment out this below line to use this code for inserting entries"""
-# insert_data_into_mysql(campaign_data, db_connection(), table_name)
+insert_data_into_mysql(campaign_data, db_connection(), table_name)

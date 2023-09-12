@@ -3,8 +3,6 @@ from src.utils.constants import table_name, action_list, platform_list
 import logging
 
 
-# getting log setup
-
 def get_log():
     """
     Initializing logger basic configuration
@@ -14,13 +12,16 @@ def get_log():
     return logging
 
 
+log = get_log()
+
+
 def get_user_query():
     query_input = input("Enter your query: ")
     return query_input
 
 
 def run_query(query):
-    # logging.info("Task: Connecting with database")
+    log.info("Task: Connecting with database")
     cursor, conn = db_connection()
     cursor.execute(query)
     data = cursor.fetchall()
@@ -55,8 +56,8 @@ def validate_entries():
 
 
 def get_keywords(sentence):
-    # logging.info("Task: converting sentence to lower case.")
-    # lowered_sentence = sentence.lower()
+    log.info("Task: converting sentence to lower case.")
+    lowered_sentence = sentence.lower()
 
     logging.info("Task: getting entries from database to validate.")
     db_entries = validate_entries()

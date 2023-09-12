@@ -2,8 +2,6 @@ import mysql.connector
 from mysql.connector import Error
 from src.utils.constants import db_password, db_user, db_host, database
 
-# getting log setup
-
 
 def db_connection():
     try:
@@ -20,3 +18,4 @@ def db_connection():
 
     except Error as e:
         raise e
+

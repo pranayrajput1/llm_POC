@@ -6,12 +6,15 @@ data_dir = path / "data"
 dataset_dir = data_dir / "dataset"
 campaign_data = dataset_dir / "unified_data.csv"
 
-db_password = "sanskriti"
-db_user = "sanskriti"
+db_password = "knoldus"
+db_user = "knoldus"
 db_host = "localhost"
 database = "campaign_data"
 table_name = "unified_data"
 user_variable = "user"
+db_port = 3306
+
+local_model_path = "wizardlm-13b-v1.1-superhot-8k.ggmlv3.q4_0.bin"
 
 platform_list = ["facebook", "youtube", "instagram"]
 action_list = ["views", "clicks", "bought", "subscription", "followers"]
