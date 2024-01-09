@@ -1,6 +1,6 @@
 import pandas as pd
 from src.db.db_connection import db_connection
-from src.utils.constants import campaign_data, table_name
+from src.utils.constants import table_name, youtube_dataset, youtube_data_table_name
 from src.utils.helpers.input_helpers import get_log
 
 # getting log setup
@@ -16,12 +16,17 @@ def insert_data_into_mysql(csv_file, db_config, table):
     @return: response message
     """
     try:
-        logging.info("Read the CSV file into a pandas DataFrame and insert entries to database")
-        logging.debug(f"Reading csv file from: {campaign_data}")
+        logging.info("Read the CSV file into a pandas dataframe and insert entries to database")
+
+        logging.info("Task: Getting file name from csv file")
+        filename = csv_file.name
+
+        logging.debug(f"Reading csv file: {filename}")
         df = pd.read_csv(csv_file)
 
-        logging.debug(f"Dropping index column from dataframe file from: {campaign_data}")
-        df = df.drop("Index", axis=1)
+        drop_col = "rank"
+        logging.debug(f"Dropping {drop_col} column from dataframe file from: {filename}")
+        df = df.drop(drop_col, axis=1)
 
         logging.info("Establish a connection to the MySQL server")
         cursor, connection = db_config
@@ -29,10 +34,10 @@ def insert_data_into_mysql(csv_file, db_config, table):
         logging.debug("Getting columns from dataframe")
         columns = ", ".join(df.columns)
 
-        # logging.debug("Converting columns name to lower case")
-        # columns = columns.lower()
+        logging.debug("Converting columns name to lower case")
+        columns = columns.lower()
 
-        query_template = f"INSERT INTO {table_name} ({columns}) VALUES ({', '.join(['%s'] * len(df.columns))})"
+        query_template = f"INSERT INTO {table} ({columns}) VALUES ({', '.join(['%s'] * len(df.columns))})"
         data = [tuple(row) for row in df.itertuples(index=False)]
 
         logging.info("Insert data into the MySQL table using executemany")
@@ -74,4 +79,4 @@ def insert_data_into_mysql(csv_file, db_config, table):
 
 
 """comment out this below line to use this code for inserting entries"""
-insert_data_into_mysql(campaign_data, db_connection(), table_name)
+insert_data_into_mysql(youtube_dataset, db_connection(), youtube_data_table_name)

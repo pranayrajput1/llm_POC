@@ -5,12 +5,15 @@ path = Path(__file__).resolve().parent.parent
 data_dir = path / "data"
 dataset_dir = data_dir / "dataset"
 campaign_data = dataset_dir / "unified_data.csv"
+youtube_dataset = dataset_dir / "youtube_data.csv"
 
 db_password = "knoldus"
 db_user = "knoldus"
 db_host = "localhost"
 database = "campaign_data"
 table_name = "unified_data"
+youtube_data_table_name = "youtube_data"
+
 user_variable = "user"
 db_port = 3306
 

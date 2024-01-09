@@ -1,6 +1,5 @@
 from src.utils.constants import table_name, user_variable
-from src.utils.helpers.input_helpers import run_query
-from src.utils.helpers.log_setup import get_log
+from src.utils.helpers.input_helpers import run_query, get_log
 
 # getting log setup
 logging = get_log()
